@@ -1,0 +1,8 @@
+<launch>
+
+    <rosparam file="$(find BBL_robot)/config/velocity_group_controller.yaml" command="load"/>
+
+    <node name="arm_velocity_group_controller" pkg="controller_manager"  type="controller_manager"   respawn="false"
+output="screen"  args="load velocity_group_controller"/> 
+ 
+</launch>

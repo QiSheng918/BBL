@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: BBL_robot_description
+    relative_path: urdf/BBL.urdf.xacro
+  SRDF:
+    relative_path: config/BBL_robot.srdf
+  CONFIG:
+    author_name: 22
+    author_email: 2@2.com
+    generated_timestamp: 1542631862

@@ -1,0 +1,8 @@
+<launch>
+   <include file="$(find BBL_robot)/launch/controllers/joint_states_controller.launch" />
+   <include file="$(find BBL_robot)/launch/controllers/trajectory_controller.launch"/>
+   <include file="$(find BBL_robot)/launch/BBL_gazebo.launch"/>
+
+<!--   <include file="$(find BBL_robot)/launch/controllers/velocity_group_controller.launch"/>-->
+   <include file="$(find BBL_moveit)/launch/BBL_moveit_planning_executing.launch"/>
+</launch>
