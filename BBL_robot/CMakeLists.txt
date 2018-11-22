@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(BBL_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
- add_compile_options(-std=c++11)
+# add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -145,11 +145,11 @@ add_executable(jacobian src/get_joint_state.cpp)
   ${catkin_LIBRARIES}
  )
 
-# add_executable(BBL_control src/BBL_control.cpp)
-#  target_link_libraries(BBL_control
-#   ${catkin_LIBRARIES}
-#  )
-# add_dependencies(BBL_control BBL_robot_gencpp)
+add_executable(BBL_control src/BBL_control.cpp)
+ target_link_libraries(BBL_control
+  ${catkin_LIBRARIES}
+ )
+add_dependencies(BBL_control BBL_robot_gencpp)
 
 
 add_executable(BBL_imu_receive src/imu_data_receiving.cpp)
@@ -168,10 +168,10 @@ add_executable(test3 src/test3.cpp)
  )
 add_dependencies(test3 BBL_robot_gencpp)
 
-#add_executable(real_robot src/real_robot.cpp)
-#  target_link_libraries(real_robot ${catkin_LIBRARIES}
-#  )
-# add_dependencies(real_robot BBL_robot_gencpp)
+add_executable(real_robot src/real_robot.cpp)
+ target_link_libraries(real_robot ${catkin_LIBRARIES}
+ )
+add_dependencies(real_robot BBL_robot_gencpp)
 
 
 

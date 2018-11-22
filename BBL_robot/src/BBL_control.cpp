@@ -8,7 +8,7 @@
 #include<Eigen/Core>
 #include<Eigen/Dense>
 
-#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/move_group_interface/move_group.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
@@ -41,7 +41,7 @@ private:
 
     std_msgs::Float64MultiArray joint_velocity_msg;
     Eigen::Matrix<float,6,1> v_cart;
-    moveit::planning_interface::MoveGroupInterface move_group;
+    moveit::planning_interface::MoveGroup move_group;
     geometry_msgs::Pose pose_now,pose_desire,pose_reference,pose_desire_reference;
 
     BBL_robot::IMU_sEMG global_msg;

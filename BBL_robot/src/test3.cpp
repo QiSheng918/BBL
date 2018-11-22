@@ -7,7 +7,8 @@
 
 #include<Eigen/Core>
 #include<Eigen/Dense>
-#include<moveit/move_group_interface/move_group_interface.h>
+
+#include <moveit/move_group_interface/move_group.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
@@ -18,6 +19,9 @@
 #include "BBL_robot/joint_value_target.h"
 
 
+//std_msgs::Float64MultiArray joint_velocity_msg;
+//Eigen::Matrix<double,6,1> v_cart={1,0,0,0,0,0};
+//ros::Rate looprate(10);
 static const std::string PLANNING_GROUP = "arm";
 // geometry_msgs::Pose pose_reference;
 
@@ -41,7 +45,7 @@ private:
 
     std_msgs::Float64MultiArray joint_velocity_msg;
     Eigen::Matrix<float,3,1> v_cart;
-    moveit::planning_interface::MoveGroupInterface move_group;
+    moveit::planning_interface::MoveGroup move_group;
     geometry_msgs::Pose pose_now,pose_desire,pose_desire_reference,pose_reference;
 
     BBL_robot::IMU_sEMG global_msg;
@@ -128,7 +132,7 @@ void franka_robot::joint_state_callback(const sensor_msgs::JointState::ConstPtr 
           
           flag=false;
           pose_now=pose_desire_reference=pose_reference;
-          std::cout << "the pose_reference is:" << pose_reference << std::endl;
+          std::cout<<pose_reference<<std::endl;
      }
 
      //ROS_INFO("ok");     
@@ -149,15 +153,16 @@ void franka_robot::IMU_callback(const BBL_robot::IMU_sEMG::ConstPtr& IMU_msg)
          emg_data_flag =false;
          std::cout<<"the global_msg is:"<<global_msg<<std::endl;
      }
-       // std::cout<<"the IMU_msg is:"<<IMU_msg->IMU_datax<<","<<IMU_msg->IMU_datay<<","<<IMU_msg->IMU_dataz<<std::endl;
+        std::cout<<"the IMU_msg is:"<<IMU_msg->IMU_datax<<","<<IMU_msg->IMU_datay<<","<<IMU_msg->IMU_dataz<<std::endl;
         double delta_x = (IMU_msg->IMU_datax - global_msg.IMU_datax)/beishu;
         double delta_y = (IMU_msg->IMU_datay - global_msg.IMU_datay)/beishu;
         double delta_z = (IMU_msg->IMU_dataz - global_msg.IMU_dataz)/beishu;
-        //std::cout<<"error:"<<delta_x<<","<<delta_y<<","<<delta_z<<std::endl;
+        std::cout<<"error:"<<delta_x<<","<<delta_y<<","<<delta_z<<std::endl;
         pose_desire.position.x = pose_reference.position.x + delta_x;
         pose_desire.position.y = pose_reference.position.y + delta_y;
         pose_desire.position.z = pose_reference.position.z + delta_z;
-        //std::cout<<"the pose_desire is:"<<pose_desire<<std::endl;
+        std::cout<<"the pose_reference is:"<<pose_reference<<std::endl;
+        std::cout<<"the pose_desire is:"<<pose_desire<<std::endl;
 
         
 
@@ -197,7 +202,7 @@ void franka_robot::start()
             pose_desire_reference=pose_desire;
            // pose_now = move_group.getCurrentPose(move_group.getEndEffectorLink()).pose;
             Eigen::Matrix<double,3,1> temp=this->forward_kinematics(theta);
-            //std::cout<<"the forward kinetics is:"<<temp<<std::endl;
+            std::cout<<"the forward kinetics is:"<<temp<<std::endl;
             pose_now.position.x=temp(0,0);
             pose_now.position.y=temp(1,0);
             pose_now.position.z=temp(2,0);
@@ -223,7 +228,7 @@ void franka_robot::start()
                 pub.publish(pose_target_topic);
                 pub2.publish(pose_now_topic);
             
-           // std::cout<<"the desire C v is:"<<v_cart<<std::endl;
+            std::cout<<"the desire C v is:"<<v_cart<<std::endl;
             // for(int i = 0 ; i < 3; i ++)
             // {
             //    if(v_cart[i]>max_vel[i])   v_cart[i] = max_vel[i];
@@ -238,9 +243,9 @@ void franka_robot::start()
             // ROS_INFO("the determinant of J is %f",jacobian(theta).determinant());  
             // std::cout<<this->jacobian(theta)<<std::endl;   
            Eigen::Matrix<double,3,3> J=jacobian(theta);   
-        //    std::cout<<"the jacobian is"<<J<<std::endl;  
+           std::cout<<"the jacobian is"<<J<<std::endl;  
     	   Eigen::Matrix<double,3,3> M=J*J.transpose();   
-          // std::cout<<"the determinant of M is"<<M.determinant()<<std::endl;
+           std::cout<<"the determinant of M is"<<M.determinant()<<std::endl;
         //    Eigen::Matrix<float,6,1> v;
 //std::cout<<<<std::endl;
         //    joint_velocity_msg.data.resize(0);
@@ -260,7 +265,7 @@ void franka_robot::start()
             if(M.determinant()>0.0001){
                Eigen::Matrix<float,3,1>  joint_v_temp=J.inverse().cast<float>()*v_cart;
                joint_v.block(0,0,3,1)=joint_v_temp;
-             //  std::cout<<"the desire joint velocity is:"<<joint_v<<std::endl;
+               std::cout<<"the desire joint velocity is:"<<joint_v<<std::endl;
                joint_velocity_msg.data.resize(0);
                for(int i=0;i<3;i++)  {
 		          if(joint_v(i)>1)  joint_v(i)=1;

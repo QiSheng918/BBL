@@ -25,9 +25,9 @@ int main(int argc,char** argv)
   //  if((k%100-50)>0)   msg.data[1]=1;
   //  else msg.data[1]=0;
   //  k++; 
-  msg.data[0]=1*sin(0.4*pi*t);
-  msg.data[1]=1*sin(0.4*pi*t);
-  msg.data[2]=1*sin(0.4*pi*t);
+  msg.data[0]=0.3*sin(0.4*pi*t);
+  msg.data[1]=0.3*sin(0.4*pi*t);
+  msg.data[2]=0.3*sin(0.4*pi*t);
   //msg.data[0]=0;
   pub.publish(msg);
   looprate.sleep();
